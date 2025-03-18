@@ -1,12 +1,11 @@
 pipeline {
     agent any
-    environment {
-        BRANCH_NAME = "${env.BRANCH_NAME}"
-    }
     stages {
         stage('Checkout') {
             steps {
-                git branch: BRANCH_NAME, url: 'https://github.com/Arjun02BH/Maven-Project.git'
+                sh '''
+                git clone -b ${BRANCH_NAME} https://github.com/Arjun02BH/Maven-Project.git .
+                '''
             }
         }
         stage('Build') {
@@ -30,7 +29,6 @@ pipeline {
                 branch 'main'
             }
             steps {
-                // Deploy only from the main branch
                 sh 'mvn deploy'
             }
         }
@@ -40,16 +38,15 @@ pipeline {
             }
             steps {
                 echo 'Running initial setup tasks for firstcommit branch...'
-                // Add any setup-specific commands here
             }
         }
     }
     post {
         success {
-            echo "Pipeline for branch ${BRANCH_NAME} executed successfully!"
+            echo "Pipeline for branch ${env.BRANCH_NAME} executed successfully!"
         }
         failure {
-            echo "Pipeline for branch ${BRANCH_NAME} failed!"
+            echo "Pipeline for branch ${env.BRANCH_NAME} failed!"
         }
     }
 }
