@@ -6,7 +6,7 @@ pipeline {
                 sh '''
                 git clone -b ${BRANCH_NAME} https://github.com/Arjun02BH/Maven-Project.git .
                 '''
-            }
+            } 
         }
         stage('Build') {
             steps {
