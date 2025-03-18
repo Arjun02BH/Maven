@@ -1,52 +1,22 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage('Checkout') {          
             steps {
-                sh '''
-                git clone -b ${BRANCH_NAME} https://github.com/Arjun02BH/Maven-Project.git .
-                '''
-            } 
+                git branch: "master", url: "https://github.com/hkshitesh/SL-MAVEN-8-FEB-BACTH.git"
+            }
         }
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                // Use Maven to build your project
+                bat 'mvn clean package'
             }
         }
         stage('Test') {
-            when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }
-            }
             steps {
-                sh 'mvn test'
-            }
-        }
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh 'mvn deploy'
-            }
-        }
-        stage('Initial Setup') {
-            when {
-                branch 'firstcommit'
-            }
-            steps {
-                echo 'Running initial setup tasks for firstcommit branch...'
+                // Run tests if applicable
+                bat 'mvn test'
             }
         }
     }
-    post {
-        success {
-            echo "Pipeline for branch ${env.BRANCH_NAME} executed successfully!"
-        }
-        failure {
-            echo "Pipeline for branch ${env.BRANCH_NAME} failed!"
-        }
-    }
-}
+} 
